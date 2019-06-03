@@ -1,0 +1,37 @@
+Each signal consists of a sequence of the following high/low periods where each combo represents a bit. The measured periods are around T=400us. The signal consists of 24 bits and a special 'endbit'.
+0 = T,3T
+1 = 3T,T
+End = T,30T
+                     binary              hex     dec
+Power button:        0b00000001          0x01     1
+Mode+ button:        0b00000101          0x05     5
+Speed- button:       0b00000111          0x07     7
+Demo button:         0b00001000          0x08     8
+Speed+ button:       0b00001001          0x09     9
+Color+ button:       0b00001010          0x0A    10
+Mode- button:        0b00001011          0x0B    11
+Bright+ button:      0b00001100          0x0C    12
+Color- button:       0b00001101          0x0D    13
+White button:        0b00001110          0x0E    14
+Bright- button:      0b00001111          0x0F    15
+Red button:          0b00010000          0x10    16
+Green button:        0b00010001          0x11    17
+DBlue button:        0b00010010          0x12    18
+Yellow button:       0b00010011          0x13    19
+LBlue button:        0b00010100          0x14    20
+Pink button:         0b00010101          0x15    21
+
+Each code is repeated 5 times.
+Since the signal starts with the address directly, it is hard to find the start. Therefore the library needs at least repeat=2 signals, since it watches the end of the previous sequence which is more unique (T,30T).
+
+As can be seen, the above shows that the different buttons seem to differ on the last 5 bits. However, on the observed codes, bit 6-8 are always 0, so my guess is that the button code is 8 bits, and the address is 16bit. If a remote is found where the address is longer than 16bit (proving that the button number is 5) I will change the library, but for now I'll take the easy route and use the assumption of code sizes according to my observations.
+
+Special combos:
+Power + Mode+:
+  Switches led driver to listen to any remote
+Red + blue:
+  Switches the color output mode (e.g. RGB to BGR)
+Speed+ + Speed-:
+  Pairs this remote to the freshly started leddriver (< 5 seconds since power-on)
+
+Each combo results in 1 repeat of both button codes, the order being determined by which button was pressed first. The time between the 2 codes is roughly equal to the time that the user keeps pressing both buttons, but is minimally 30T (however, 100+ms is normal)
