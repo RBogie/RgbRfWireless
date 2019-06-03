@@ -1,5 +1,5 @@
 /*
- * RGB RF Wireless library v1.0.0 (20190603) made by Rob Bogie
+ * RGB RF Wireless library v1.0.1 (20190603) made by Rob Bogie
  *
  * License: GNU LGPLv3. See license.txt
  */
